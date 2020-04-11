@@ -19,6 +19,20 @@ RATES = {
     'PESOS': 1,
 }
 
+def print_invoice(factura,gross_price,net_precio,IVA):
+    print('''
+        -------------------------------------------------------------
+        ----------------- La Tiendita HAY OME------------------------
+        Artiulo                             Precio
+    
+    ''')
+    for key, value in factura.items():
+        print('{0}                           {1}'.format(key,value))
+
+    print('IVA                          {0}'.format(gross_price))
+    print('Precio bruto                 {0} '.format(gross_price))
+    print('Precio Neto                  {0}'.format(net_precio))
+
 
 
 
@@ -26,17 +40,22 @@ def checkin (items, rate):
     gross_price = 0
     net_precio = 0
     IVA = 0 
-    factura = dist()
+    factura = {}
 
 
-    for item in items:
-        gross_price += PRODUCT[item]/RATES[rate]
+    for key, value  in items.items():
+        unit_price = (PRODUCT[key]*value)/RATES[rate]
+        gross_price += unit_price
+        factura[key] = unit_price
 
 
     IVA = gross_price*0.19
     net_precio = gross_price + IVA
+
     print(gross_price)
     print(net_precio)
+    print(factura)
+    print_invoice(factura,gross_price,net_precio,IVA)
 
 
 
@@ -53,7 +72,7 @@ def retes_sw(i):
 
 
 def run ():
-        items = []
+        items = {}
         while True:
             item = input('''
             Ingrese el nombre del prodcuto:
@@ -66,8 +85,13 @@ def run ():
 
             if item.lstrip().rstrip() == str.casefold('f'):
                 break
-            
-            items.append(item)
+           
+            quantity = input('Ingrese la cantidad del producto: ')
+
+            try:
+                items[item] = int(quantity)
+            except:
+                print('El valor Ingresado debe ser numerico')
         
         rate = input('''
             [1]: EUROS
